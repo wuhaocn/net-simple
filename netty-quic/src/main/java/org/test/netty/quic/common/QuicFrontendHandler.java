@@ -5,6 +5,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.incubator.codec.quic.QuicChannel;
 import io.netty.incubator.codec.quic.QuicStreamChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -13,11 +15,7 @@ import io.netty.incubator.codec.quic.QuicStreamChannel;
  * @author wuhao
  */
 public class QuicFrontendHandler extends SimpleChannelInboundHandler<Object> {
-    private QuicServer quicServer;
-
-    public QuicFrontendHandler(QuicServer quicServer) {
-        this.quicServer = quicServer;
-    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuicChannelHandler.class);
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
@@ -30,7 +28,7 @@ public class QuicFrontendHandler extends SimpleChannelInboundHandler<Object> {
     }
     @Override
     public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
-		System.out.println("channelRead0" + ctx.channel().remoteAddress());
+        LOGGER.info("channelRead0:{}", ctx.channel().remoteAddress());
         if (msg == null) {
             return;
         }

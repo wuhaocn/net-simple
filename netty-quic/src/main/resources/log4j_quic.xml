@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" packages="">
+  <Appenders>
+    <RollingRandomAccessFile name="RollingFile"
+                             fileName="netty-quic/log/${server.name}_raw.log" immediateFlush="true" bufferSize="8192"
+                             filePattern="netty-quic/log/${server.name}_raw_%d{yyyy-MM-dd-HH-mm}.log.gz">
+      <PatternLayout charset="UTF-8">
+        <pattern>%d{HHmmssSSS}\t%msg%n</pattern>
+      </PatternLayout>
+
+      <Policies>
+        <TimeBasedTriggeringPolicy modulate="true" interval="10"/>
+      </Policies>
+      <DefaultRolloverStrategy>
+        <Delete basePath="netty-quic/log/${server.name}" maxDepth="1">
+          <IfFileName glob="${server.name}_raw_*"/>
+          <IfLastModified age="2m" />
+        </Delete>
+      </DefaultRolloverStrategy>
+    </RollingRandomAccessFile>
+
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{MMdd HH:mm:ss,SSS}:%c{1}:%L %msg%n" />
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Root level="INFO" additivity="false">
+      <AppenderRef ref="RollingFile" />
+      <AppenderRef ref="Console" />
+    </Root>
+  </Loggers>
+</Configuration>

@@ -4,18 +4,21 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.incubator.codec.quic.QuicChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * QuicChannelHandler
  * 
  */
 public class QuicChannelHandler extends ChannelInboundHandlerAdapter {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(QuicChannelHandler.class);
 	public QuicChannelHandler() {
 	}
-
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) {
-		System.out.println("channelActive" + ctx.channel().remoteAddress());
+		LOGGER.info("channelActive:{}", ctx.channel().remoteAddress());
 		ctx.fireChannelActive();
 	}
 
@@ -23,7 +26,7 @@ public class QuicChannelHandler extends ChannelInboundHandlerAdapter {
 	public void channelInactive(ChannelHandlerContext ctx) {
 		
 		try {
-			System.out.println("channelInactive" + ctx.channel().remoteAddress());
+			LOGGER.info("channelInactive:{}", ctx.channel().remoteAddress());
 			QuicChannel quicChannel = (QuicChannel) ctx.channel();
 			quicChannel.collectStats().addListener(f -> {
 			});
