@@ -1,5 +1,5 @@
 dependencies {
-  compile group: 'org.slf4j', name: 'slf4j-api', version: "${slf4j_version}"
+  compile group: 'org.slf4j', name: 'slf4j-api', version: slf4j_version
   compile "org.bouncycastle:bcpkix-jdk18on:1.72"
   compile group: 'io.netty', name: 'netty-all', version: netty_version
   compile group:'io.netty.incubator',name:'netty-incubator-codec-native-quic',version:netty_quic_version,classifier:netty_quic_platform
