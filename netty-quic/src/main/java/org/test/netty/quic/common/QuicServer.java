@@ -1,6 +1,7 @@
 package org.test.netty.quic.common;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelOption;
@@ -41,24 +42,25 @@ public class QuicServer {
 
 
     public void run() throws InterruptedException, CertificateException {
-
+        PooledByteBufAllocator allocator = new PooledByteBufAllocator(false); // 使用池化的内存分配器
         QuicSslContext context = getSslContext();
         ChannelHandler codec = new QuicServerCodecBuilder()
                 .sslContext(context)
-                .maxIdleTimeout(60000, TimeUnit.MILLISECONDS)
+                .maxIdleTimeout(6000, TimeUnit.MILLISECONDS)
                 .initialMaxData(10000000)
                 .initialMaxStreamDataBidirectionalLocal(1000000)
                 .initialMaxStreamDataBidirectionalRemote(1000000)
                 .initialMaxStreamsBidirectional(100)
                 .initialMaxStreamsUnidirectional(100)
-                .tokenHandler(NoValidationQuicTokenHandler.INSTANCE)
-                .handler(new QuicChannelHandler())
-                .streamOption(ChannelOption.AUTO_READ, false)
+                .tokenHandler(null)
+//                .handler(new QuicChannelHandler())
+                .streamOption(ChannelOption.AUTO_READ, true)
                 .streamHandler(new QuicStreamInitializer()).build();
         Bootstrap bs = new Bootstrap();
         channel = bs.group(group)
                 .channel(NioDatagramChannel.class)
                 .handler(codec)
+                .option(ChannelOption.ALLOCATOR, allocator) // 设置内存分配器
                 .bind(new InetSocketAddress(port))
                 .sync().channel();
     }

@@ -28,7 +28,7 @@ public class QuicFrontendHandler extends SimpleChannelInboundHandler<Object> {
     }
     @Override
     public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
-        LOGGER.info("channelRead0:{}", ctx.channel().remoteAddress());
+        //LOGGER.info("channelRead0:{}", ctx.channel().remoteAddress());
         if (msg == null) {
             return;
         }
